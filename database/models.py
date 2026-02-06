@@ -5,7 +5,7 @@ import os
 
 # استخدام PostgreSQL من Railway
 DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///stock.db')
-if DATABASE_URL.startswith('postgres://'):
+if DATABASE_URL and DATABASE_URL.startswith('postgres://'):
     DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
 
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
@@ -37,11 +37,9 @@ class Analysis(Base):
     stop_loss = Column(Numeric(10, 4))
 
 def init_database():
-    """تهيئة قاعدة البيانات - إنشاء الجداول"""
     Base.metadata.create_all(engine)
     print("✅ Database tables created")
 
 def get_session():
-    """الحصول على جلسة قاعدة البيانات"""
     Session = sessionmaker(bind=engine)
     return Session()
