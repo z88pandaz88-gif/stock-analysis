@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
+# استخدام PostgreSQL من Railway
 DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///stock.db')
 if DATABASE_URL.startswith('postgres://'):
     DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
@@ -36,9 +37,11 @@ class Analysis(Base):
     stop_loss = Column(Numeric(10, 4))
 
 def init_database():
+    """تهيئة قاعدة البيانات - إنشاء الجداول"""
     Base.metadata.create_all(engine)
-    print("✅ Database initialized")
+    print("✅ Database tables created")
 
 def get_session():
+    """الحصول على جلسة قاعدة البيانات"""
     Session = sessionmaker(bind=engine)
     return Session()
